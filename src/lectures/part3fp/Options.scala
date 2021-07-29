@@ -20,7 +20,7 @@ object Options extends App {
   def backupMethod(): String = "A valid result"
   val chainedResult = Option(unsafeMethod()).orElse(Option(backupMethod())) //if unsafeMethod gives null, execute backupMethod
 
-  //DESIGNING unsafe APIs - we return Option
+  //DESIGNING safe APIs - return Option
   def betterUnsafeMethod(): Option[String] = None
   def betterBackupMethod(): Option[String] = Some("A valid result")
 
