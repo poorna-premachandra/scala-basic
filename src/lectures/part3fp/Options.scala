@@ -96,7 +96,7 @@ object Options extends App {
     .foreach(println)
 
 
-  //Method 3 - for comprehensions
+  //Method 3 - for comprehension
   val forConnectionStatus = for {
     host <- config.get("host")
     port <- config.get("port")
