@@ -1,6 +1,6 @@
 package lectures.part4pm
 
-object PatternMatchingExtra {
+object PatternMatchingExtra extends App {
 
   //#1 - catches are matches
   try {
@@ -31,7 +31,8 @@ object PatternMatchingExtra {
     case v if v % 2 == 0 => v + " is even"
     case 1 => "one"
     case _ => ""
-  } //mappedList is calle partial function literal
+  } //mappedList is called partial function literal
 
-  println(mappedList) //every element in list will be evaluated
+  //every element in list will be evaluated
+  println(mappedList) //List(one, 2 is even, , 4 is even)
 }
