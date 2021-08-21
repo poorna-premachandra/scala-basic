@@ -53,7 +53,7 @@ object CurriesPAF extends App { //curries and partially applied function/partial
   println(List(11.4576345346, Math.PI, 67.234212341).map(complexFormatter))
 
   //2, difference between
-  def byName(n: Int) = n + 1
+  def byName(n: => Int) = n + 1
   def byFunction(f: () => Int) = f() + 1
 
   def method: Int = 42
