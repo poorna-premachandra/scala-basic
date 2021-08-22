@@ -8,7 +8,7 @@ abstract class MyStream[+A] {
   def tail: MyStream[A]
 
   def #::[B >: A](element: B): MyStream[B] //prepend operator
-  def ++[B >: A](anotherStream: MyStream[B]): MyStream[B] //concatenate two streams
+  def ++[B >: A](anotherStream: => MyStream[B]): MyStream[B] //concatenate two streams
 
   def foreach(f: A => Unit): Unit
   def map[B](f: A => B): MyStream[B]
@@ -30,7 +30,7 @@ object EmptyStream extends MyStream[Nothing] {
   def tail: MyStream[Nothing] = throw new NoSuchElementException
 
   def #::[B >: Nothing](element: B): MyStream[B] = new Cons[B](element, this)
-  def ++[B >: Nothing](anotherStream: MyStream[B]): MyStream[B] = anotherStream
+  def ++[B >: Nothing](anotherStream: => MyStream[B]): MyStream[B] = anotherStream
 
   def foreach(f: Nothing => Unit): Unit = ()
   def map[B](f: Nothing => B): MyStream[B] = this
@@ -46,7 +46,7 @@ class Cons[+A](hd: A, tl: => MyStream[A]) extends MyStream[A] { //tail param is 
   override lazy val tail: MyStream[A] = tl //call by need
 
   def #::[B >: A](element: B): MyStream[B] = new Cons[B](element, this) //lazy evaluation is still preserved
-  def ++[B >: A](anotherStream: MyStream[B]): MyStream[B] = new Cons(head, tail ++ anotherStream)
+  def ++[B >: A](anotherStream: => MyStream[B]): MyStream[B] = new Cons(head, tail ++ anotherStream) //(anotherStream: => MyStream[B]) //call by name
 
   def foreach(f: A => Unit): Unit = {
     f(head)
@@ -59,7 +59,7 @@ class Cons[+A](hd: A, tl: => MyStream[A]) extends MyStream[A] { //tail param is 
     mapped.tail //only here the tail gets evaluated
    */
   def map[B](f: A => B): MyStream[B] = new Cons[B](f(head), tail.map(f)) //preserves lazy evaluation
-  def flatMap[B](f: A => MyStream[B]): MyStream[B] = f(head) ++ tail.flatMap(f)
+  def flatMap[B](f: A => MyStream[B]): MyStream[B] = f(head) ++ tail.flatMap(f) // should make "def ++" call by name otherwise "tail.flatMap(f)" will be eagerly evaluated
   def filter(predicate: A => Boolean): MyStream[A] =
     if (predicate(head)) new Cons(head, tail.filter(predicate))
     else tail.filter(predicate) //preserves lazy evaluation
@@ -89,4 +89,30 @@ object StreamsPlayground extends App {
 
   println(startFrom0.map(_ * 2).take(100).toList()) //map
   println(startFrom0.flatMap(x => new Cons(x, new Cons(x + 1, EmptyStream))).take(10).toList()) //flatmap
+  println(startFrom0.filter(_ < 10).take(10).toList()) //filter
+
+  //Exercise
+  //1. stream of Fibonacci numbers
+  def fibonacci(first: BigInt, second: BigInt): MyStream[BigInt] =
+    new Cons(first, fibonacci(second, first + second))
+
+  println(fibonacci(1, 1).take(100).toList())
+
+  //2. stream of prime numbers with Eratosthenes' sieve
+  /*
+  [ 2 3 4 ... ]
+
+  filter out all numbers divisible by 2 (but keep initial 2)
+  [ 2 3 5 7 9 11 ... ]
+
+  filter out all numbers divisible by 3 (but keep initial 3)
+  [ 2 3 5 7 11 13 17 ... ]
+
+  etc.. continues with next number in the list
+   */
+  def eratosthenes(numbers: MyStream[Int]): MyStream[Int] =
+  if (numbers.isEmpty) numbers
+  else new Cons(numbers.head, eratosthenes(numbers.tail.filter(_ % numbers.head != 0)))
+
+  println(eratosthenes(MyStream.from(2)(_ + 1)).take(100).toList())
 }
