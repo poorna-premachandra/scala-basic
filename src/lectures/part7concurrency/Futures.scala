@@ -4,7 +4,7 @@ import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.util.{Failure, Success}
 
-object FuturesPromises extends App {
+object Futures extends App {
 
   def calculate: Int = { //runs on ANOTHER thread
     Thread.sleep(2000)
