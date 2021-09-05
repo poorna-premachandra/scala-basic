@@ -16,7 +16,7 @@ object FuturesAsFunctions extends App {
     val names = Map(
       "fb.id.0" -> "Dummy",
       "fb.id.1" -> "Mark",
-      "fb.is.2" -> "Bill"
+      "fb.id.2" -> "Bill"
     )
 
     val friends = Map(
@@ -58,7 +58,7 @@ object FuturesAsFunctions extends App {
   } mark.poke(bill)
 
 
-  Thread.sleep(5000)
+  Thread.sleep(1000)
 
   //fallbacks
   //returns a dummy/default profile if original call fails
