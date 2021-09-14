@@ -1,4 +1,4 @@
-package exercises.part2oop
+package exercises
 
 object OOClasses extends App {
   val novelWriter = new Writer("John", "Wick", 1986)

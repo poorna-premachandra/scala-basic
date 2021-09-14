@@ -120,7 +120,7 @@ object FuturesAsFunctions extends App {
   val future = promise.future
 
   //thread 1 - consumer
-  future.onComplete {
+  future.onComplete { //non-blocking processing (callback)
     case Success(r) => println("[consumer] I've received " + r)
   }
 
