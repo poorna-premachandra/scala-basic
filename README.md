@@ -9,3 +9,4 @@
   6. Advanced Functional Programming</br>
   7. Concurrency</br>
   8. Implicits</br>
+  9. Type System</br>
