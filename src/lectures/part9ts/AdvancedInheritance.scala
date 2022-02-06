@@ -74,7 +74,7 @@ object AdvancedInheritance extends App {
 
   //white = Red with Green with Blue with <White>
   //      = AnyRef with <Red> with AnyRef with <Cold> with <Green> with AnyRef with <Cold> with <Blue> with <white>
-  //      = AnyRef with <Red> with X with <Cold> with <Green> X with X with <Blue> with <white>
+  //      = AnyRef with <Red> with X with <Cold> with <Green> X with X with <Blue> with <white>   <- multiple occurrence of a type is neglected
   //      = AnyRef with <Red> with <Cold> with <Green> with <Blue> with <White>  <- types will be linearized like this
   // so it prints white, blue, green, cold
   //white's super will be blue, blue's super will be green, green's super will be cold.. etc.
